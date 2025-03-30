@@ -1,9 +1,626 @@
-.Happy_Birthday {
-    margin: 0;
-    position: absolute;
-    font: 16px Verdana;
-    color: #eee;
-    height: 25px;
-    top: calc(100vh - 30px);
-    text-shadow: 2px 2px 2px white; /* التصحيح هنا */
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معايدة تفاعلية محسنة</title>
+    <style>
+        /* التنسيقات العامة */
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap');
+        
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Amiri', 'Tajawal', 'Arial', sans-serif;
+            cursor: crosshair;
+            direction: rtl;
+        }
+
+        /* تأثير الألوان الخلفية */
+        #color-wave {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #1e0030, #00294d, #003300);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.3;
+        }
+
+        /* النجوم المتلألئة */
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        /* نص التهنئة */
+        #message-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 9999;
+            width: 100%;
+        }
+
+        #message {
+            color: #fff;
+            font-size: 4.5em;
+            font-weight: bold;
+            text-shadow: 0 0 10px gold, 0 0 20px yellow, 0 0 30px orange;
+            opacity: 0;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        
+        .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px) scale(0.5);
+            animation: charAppear 0.5s forwards;
+        }
+
+        /* إضافة زخرفة عربية إسلامية */
+        .decoration {
+            position: absolute;
+            width: 80%;
+            height: 100px;
+            max-width: 600px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        
+        #top-decoration {
+            top: 10%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpath d='M0,10 C20,0 30,20 50,10 C70,0 80,20 100,10 L100,0 L0,0 Z' fill='%23fcba03' fill-opacity='0.5'/%3E%3C/svg%3E") no-repeat center;
+            background-size: contain;
+            filter: drop-shadow(0 0 5px gold);
+        }
+        
+        #bottom-decoration {
+            bottom: 15%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C20,10 30,-10 50,0 C70,10 80,-10 100,0 L100,20 L0,20 Z' fill='%23fcba03' fill-opacity='0.5'/%3E%3C/svg%3E") no-repeat center;
+            background-size: contain;
+            filter: drop-shadow(0 0 5px gold);
+        }
+
+        /* لوحة التحكم */
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10000;
+            max-width: 100%;
+            padding: 0 20px;
+        }
+        
+        .control-button {
+            padding: 10px 15px;
+            background: linear-gradient(45deg, #0b2d4b, #1e6091);
+            color: white;
+            border: 2px solid #3498db;
+            border-radius: 30px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .control-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+        }
+        
+        #play-button {
+            background: linear-gradient(45deg, #8e44ad, #3498db);
+            border-color: #9b59b6;
+            box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+        }
+        
+        #play-button:hover {
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.8);
+        }
+
+        /* الرسوم المتحركة */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes charAppear {
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+        
+        /* إضافة تأثيرات للأعياد */
+        .emoji {
+            display: inline-block;
+            font-size: 1.2em;
+            animation: spin 2s infinite alternate;
+            margin: 0 10px;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(-15deg) scale(1); }
+            to { transform: rotate(15deg) scale(1.3); }
+        }
+        
+        /* تحسين للهواتف المحمولة */
+        @media (max-width: 768px) {
+            #message {
+                font-size: 2.8em;
+            }
+            
+            .control-button {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+            
+            .decoration {
+                height: 60px;
+            }
+            
+            #top-decoration {
+                top: 5%;
+            }
+            
+            #bottom-decoration {
+                bottom: 25%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="color-wave"></div>
+    <div id="stars-container"></div>
+    <div id="top-decoration" class="decoration"></div>
+    <div id="bottom-decoration" class="decoration"></div>
+    <div id="message-container">
+        <h1 id="message"><span class="emoji">🌙</span>كل عام وأنتم بخير<span class="emoji">✨</span></h1>
+    </div>
+    <div id="controls">
+        <button id="play-button" class="control-button">أضغط للإحتفال 🎆</button>
+        <button id="crescent-button" class="control-button">أضف هلال ☪️</button>
+        <button id="star-button" class="control-button">أضف نجوم ⭐</button>
+        <button id="color-button" class="control-button">تغيير الألوان 🎨</button>
+    </div>
+    <canvas id="fireworks"></canvas>
+
+    <script>
+        // تهيئة العناصر الأساسية
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        const messageEl = document.getElementById('message');
+        const playButton = document.getElementById('play-button');
+        const crescentButton = document.getElementById('crescent-button');
+        const starButton = document.getElementById('star-button');
+        const colorButton = document.getElementById('color-button');
+        const topDecoration = document.getElementById('top-decoration');
+        const bottomDecoration = document.getElementById('bottom-decoration');
+        let cw = window.innerWidth;
+        let ch = window.innerHeight;
+        let isPlaying = false;
+        let colorSchemes = [
+            [0, 120, 240], // أزرق، أخضر، أحمر
+            [45, 165, 285], // برتقالي، فيروزي، أرجواني
+            [60, 180, 300], // أصفر، سماوي، بنفسجي
+            [20, 140, 260], // برتقالي محمر، أخضر مزرق، أزرق بنفسجي
+            [30, 150, 270]  // برتقالي مصفر، أخضر مصفر، أزرق محمر
+        ];
+        let currentColorScheme = 0;
+        
+        // ضبط أبعاد Canvas
+        canvas.width = cw;
+        canvas.height = ch;
+        
+        // إنشاء النجوم المتلألئة
+        function createStars(count = 150) {
+            const starsContainer = document.getElementById('stars-container');
+            starsContainer.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // حجم عشوائي
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // موقع عشوائي
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // توقيت عشوائي
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${2 + Math.random() * 3}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // تأثير ظهور النص حرف بحرف
+        function animateText() {
+            messageEl.style.opacity = "1";
+            const text = messageEl.innerText;
+            messageEl.innerHTML = '';
+            
+            for (let i = 0; i < text.length; i++) {
+                const charSpan = document.createElement('span');
+                charSpan.className = 'char';
+                charSpan.style.animationDelay = `${i * 0.1}s`;
+                charSpan.textContent = text[i];
+                messageEl.appendChild(charSpan);
+            }
+        }
+        
+        // تغيير نظام الألوان
+        function changeColorScheme() {
+            currentColorScheme = (currentColorScheme + 1) % colorSchemes.length;
+        }
+        
+        // إضافة أزرار التحكم
+        playButton.addEventListener('click', () => {
+            if (!isPlaying) {
+                startAll();
+                playButton.textContent = "أضف المزيد! 🎆";
+                isPlaying = true;
+            } else {
+                // إضافة المزيد من الألعاب النارية عند النقر مرة أخرى
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        fireworks.push(new Firework(Math.random() * cw));
+                    }, i * 200);
+                }
+            }
+        });
+        
+        crescentButton.addEventListener('click', () => {
+            if (isPlaying) {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const fw = new Firework(Math.random() * cw);
+                        fw.forcedExplosionType = 1; // هلال
+                        fireworks.push(fw);
+                    }, i * 300);
+                }
+            }
+        });
+        
+        starButton.addEventListener('click', () => {
+            if (isPlaying) {
+                createStars(Math.floor(Math.random() * 50) + 50);
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const fw = new Firework(Math.random() * cw);
+                        fw.forcedExplosionType = 2; // نجم
+                        fireworks.push(fw);
+                    }, i * 300);
+                }
+            }
+        });
+        
+        colorButton.addEventListener('click', () => {
+            if (isPlaying) {
+                changeColorScheme();
+                // تشغيل ألعاب نارية بألوان النظام الجديد
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        fireworks.push(new Firework(Math.random() * cw));
+                    }, i * 200);
+                }
+            }
+        });
+
+        // بدء كل التأثيرات
+        function startAll() {
+            animateText();
+            createStars();
+            startFireworks();
+            
+            // إظهار الزخارف
+            topDecoration.style.opacity = "1";
+            bottomDecoration.style.opacity = "1";
+            
+            // إضافة ألعاب نارية عند البدء
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    fireworks.push(new Firework(Math.random() * cw));
+                }, i * 300);
+            }
+        }
+
+        // كلاس الألعاب النارية محسن
+        class Firework {
+            constructor(x, y = ch) {
+                this.x = x;
+                this.y = y;
+                this.targetY = ch * 0.2 + (Math.random() * ch * 0.3);
+                this.speed = 8 + Math.random() * 4;
+                this.particles = [];
+                
+                // استخدام نظام الألوان الحالي
+                const colorBase = colorSchemes[currentColorScheme];
+                this.hue = colorBase[Math.floor(Math.random() * colorBase.length)];
+                this.hue += Math.random() * 20 - 10; // تنويع قليل
+                
+                this.saturation = 100;
+                this.lightness = 50 + Math.random() * 10;
+                this.color = `hsl(${this.hue}, ${this.saturation}%, ${this.lightness}%)`;
+                this.trail = [];
+                this.trailLength = 5;
+                this.exploded = false;
+                this.forcedExplosionType = null; // للتحكم من الخارج
+            }
+
+            update() {
+                if (!this.exploded) {
+                    // إضافة تأثير المسار
+                    this.trail.unshift({ x: this.x, y: this.y });
+                    if (this.trail.length > this.trailLength) {
+                        this.trail.pop();
+                    }
+                    
+                    this.y -= this.speed;
+                    if (this.y <= this.targetY) this.explode();
+                } else {
+                    this.particles.forEach((p, i) => {
+                        p.update();
+                        if (p.alpha <= 0) {
+                            this.particles.splice(i, 1);
+                        }
+                    });
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                const particleCount = 100 + Math.floor(Math.random() * 50);
+                
+                // استخدام النوع المفروض أو اختيار نوع عشوائي
+                const explosionType = this.forcedExplosionType !== null ? 
+                    this.forcedExplosionType : Math.floor(Math.random() * 4);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    let particle;
+                    const angle = (i / particleCount) * Math.PI * 2;
+                    
+                    switch(explosionType) {
+                        case 0: // دائري
+                            particle = new Particle(this.x, this.y, this.color, Math.random() * Math.PI * 2);
+                            break;
+                        case 1: // هلال
+                            const crescentShape = this.crescentShape(angle);
+                            particle = new Particle(this.x, this.y, this.color, angle, crescentShape.x * 3, crescentShape.y * 3);
+                            break;
+                        case 2: // نجمة
+                            const starPoints = 5; // عدد رؤوس النجمة
+                            const innerRadius = 0.4;
+                            const outerRadius = 1.0;
+                            let radius = i % 2 === 0 ? outerRadius : innerRadius;
+                            const starX = Math.cos(angle) * radius * 3;
+                            const starY = Math.sin(angle) * radius * 3;
+                            particle = new Particle(this.x, this.y, this.color, angle, starX, starY);
+                            break;
+                        case 3: // عشوائي
+                            const randomAngle = Math.random() * Math.PI * 2;
+                            const randomDistance = Math.random() * 5;
+                            particle = new Particle(this.x, this.y, this.color, randomAngle, 
+                                Math.cos(randomAngle) * randomDistance, 
+                                Math.sin(randomAngle) * randomDistance);
+                            break;
+                    }
+                    
+                    this.particles.push(particle);
+                }
+                
+                // إضافة جسيمات إضافية على شكل ذيل في بعض الحالات
+                if (Math.random() > 0.5) {
+                    for (let i = 0; i < 20; i++) {
+                        const tailAngle = Math.PI / 2 + (Math.random() * Math.PI / 4 - Math.PI / 8);
+                        const tailParticle = new Particle(this.x, this.y, this.color, tailAngle, null, null, 2 + Math.random() * 2);
+                        tailParticle.gravity = 0.03; // جاذبية أقل للذيل
+                        this.particles.push(tailParticle);
+                    }
+                }
+            }
+            
+            // دالة محسنة لرسم شكل الهلال
+            crescentShape(angle) {
+                // معامل لضبط شكل الهلال
+                const crescentFactor = 0.7;
+                const t = angle;
+                
+                // حساب نقطة على الدائرة الخارجية
+                const outerX = Math.cos(t);
+                const outerY = Math.sin(t);
+                
+                // تحديد ما إذا كانت النقطة في منطقة الهلال
+                if (outerX > -0.2) {
+                    return { x: outerX, y: outerY };
+                } else {
+                    // تعديل النقطة لتكون داخل منحنى الهلال
+                    const innerFactor = 0.5 + (0.5 * Math.cos(t * 2));
+                    return { 
+                        x: outerX * crescentFactor * innerFactor, 
+                        y: outerY * crescentFactor * innerFactor 
+                    };
+                }
+            }
+
+            draw() {
+                if (!this.exploded) {
+                    // رسم المسار
+                    for (let i = 0; i < this.trail.length; i++) {
+                        const point = this.trail[i];
+                        const alpha = (i / this.trail.length) * 0.6;
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, 3 * (1 - i / this.trail.length), 0, Math.PI * 2);
+                        ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${alpha})`;
+                        ctx.fill();
+                    }
+                    
+                    // رسم الصاروخ
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+                
+                // رسم الجسيمات
+                this.particles.forEach(p => p.draw());
+            }
+        }
+
+        // كلاس الجسيمات المحسن
+        class Particle {
+            constructor(x, y, color, angle, forceX = null, forceY = null, speed = null) {
+                this.x = x;
+                this.y = y;
+                this.initialX = x;
+                this.initialY = y;
+                this.colorHSL = color;
+                this.angle = angle;
+                this.speed = speed || (Math.random() * 5 + 2);
+                this.gravity = 0.05;
+                this.friction = 0.98;
+                this.alpha = 1;
+                this.decay = 0.015 + Math.random() * 0.01;
+                this.hue = parseInt(color.split('(')[1].split(',')[0]);
+                this.shimmer = Math.random() > 0.7; // تلألؤ عشوائي للجسيمات
+                
+                if (forceX !== null && forceY !== null) {
+                    this.vx = forceX;
+                    this.vy = forceY;
+                } else {
+                    this.vx = Math.cos(this.angle) * this.speed;
+                    this.vy = Math.sin(this.angle) * this.speed;
+                }
+                
+                this.size = Math.random() * 3 + 1;
+                
+                // تأثيرات إضافية
+                this.oscillation = Math.random() > 0.5;
+                this.oscillationSpeed = Math.random() * 0.2;
+                this.oscillationDistance = Math.random() * 5;
+                this.oscillationAngle = 0;
+            }
+
+            update() {
+                // تطبيق الجاذبية والاحتكاك
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                
+                // إضافة تأثير التذبذب العشوائي للبعض
+                if (this.oscillation) {
+                    this.oscillationAngle += this.oscillationSpeed;
+                    const oscillationX = Math.cos(this.oscillationAngle) * this.oscillationDistance;
+                    this.x += this.vx + oscillationX * 0.1;
+                } else {
+                    this.x += this.vx;
+                }
+                
+                this.y += this.vy;
+                
+                this.alpha -= this.decay;
+                
+                // تأثير تغير اللون
+                this.hue += 0.5;
+            }
+
+            draw() {
+                ctx.beginPath();
+                
+                // تأثير التلألؤ
+                let size = this.size;
+                if (this.shimmer) {
+                    size *= 0.8 + Math.sin(Date.now() * 0.01 + this.x) * 0.4;
+                }
+                
+                ctx.arc(this.x, this.y, size, 0, Math.PI * 2);
+                
+                // تغيير لون الجسيمات مع الوقت
+                const hue = (this.hue) % 360;
+                const brightness = this.shimmer ? 
+                    (60 + Math.sin(Date.now() * 0.01 + this.y) * 20) : 60;
+                
+                ctx.fillStyle = `hsla(${hue}, 100%, ${brightness}%, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+
+        let fireworks = [];
+        let animationId;
+
+        // دورة الأنيميشن الرئيسية
+        function animate() {
+            // تأثير التلاشي التدريجي مع احتفاظ بعض اللون الأسود
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillRect(0, 0, cw, ch);
+
+            fireworks.forEach((fw, i) => {
+                fw.update();
+                fw.draw();
+                
+                // إزالة الألعاب النارية المنتهية
+                if (fw.exploded && fw.particles.length === 0) {
+                    fireworks.splice(i, 1);
+                }
+            });
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // بدء الألعاب التلقائية
+        function startFireworks() {
+            // تشغيل التحريك
+            animate();
+            
+            // إضافة ألعاب نارية جديدة كل فترة
+            setInterval(() => {
+                if (fireworks.length < 8) { // تحديد عدد الألعاب النارية على الشاشة
+                    fireworks.push(new Firework(Math.random() * cw));
+                }
+            }, 1000);
+        }
+
+        // تفعيل النقر على الشاشة
+        canvas.addEventListener('click', (e) => {
+            if (isPlaying) {
+                fireworks.push(new Firework(e.clientX, e.clientY + 100));
+            }
+        });
+
+        // تعديل الحجم عند تغيير النافذة
+        window.addEventListener('resize', () => {
+            cw = window.innerWidth;
+            ch = window.innerHeight;
+            canvas.width = cw;
+            canvas.height = ch;
+        });
+    </script>
+</body>
+</html>
